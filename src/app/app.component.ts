@@ -1,5 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Component, OnInit} from '@angular/core';
+import {CovidService} from './covid.service';
 
 @Component({
 	selector: 'app-root',
@@ -7,8 +8,8 @@ import {Component, OnInit} from '@angular/core';
 	styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-	constructor(private httpClient: HttpClient) {
-	}
+	constructor(private httpClient: HttpClient, private covidService: CovidService) {}
+
 	title = 'covid-graphs';
 	selectedStates = ['New York'];
 	statesData: any[][];
@@ -17,11 +18,11 @@ export class AppComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.stateChanged();
-		this.httpClient.get('/api/covid/names').subscribe(s => this.states = s as string[]);
+		this.covidService.getNames().subscribe(s => this.states = s);
 	}
 
 	stateChanged() {
-		this.httpClient.get('/api/covid?names=' + this.selectedStates.join(',')).subscribe(
+		this.covidService.getByStates(this.selectedStates).subscribe(
 			data => {
 				this.statesData = data as any[];
 				this.generateData();
