@@ -15,6 +15,10 @@ export class AppComponent implements OnInit {
 	statesData: any[][];
 	states: string[];
 	dataHolders: CovidGraphHolder[];
+	timeAgo: number = TimeAgo.All;
+	ago = Object.keys(TimeAgo)
+		.filter(key => !isNaN(Number(TimeAgo[key])))
+		.map(key => ({ value: TimeAgo[key], title: fixWord(key) }));
 
 	ngOnInit(): void {
 		this.stateChanged();
@@ -35,15 +39,16 @@ export class AppComponent implements OnInit {
 		graphs.forEach(graph => {
 			const holder = new CovidGraphHolder();
 			dataHolders.push(holder);
-			holder.name = graph;
+			holder.name = fixWord(graph);
 			this.statesData.forEach((states) => {
 				const multi = new GraphObject();
 				holder.multi.push(multi);
 				let skipChange = graph.endsWith('Change');
 				let skipAvg = graph.endsWith('Avg');
+				const size = this.timeAgo === TimeAgo.All ? 0 : states.length - this.timeAgo - 1;
 				states.forEach((day, index) => {
 					multi.name = day.state;
-					if (!skipChange && !skipAvg) {
+					if (!skipChange && !skipAvg && index >  size) {
 						multi.series.push({name: day.date, value: day[graph]});
 					}
 					skipChange = false;
@@ -55,8 +60,19 @@ export class AppComponent implements OnInit {
 		});
 		this.dataHolders = dataHolders;
 	}
+
 }
 
+function fixWord(orig: string) {
+	return orig.replace(/([A-Z])/g, ' $1')
+		.replace(/^./, str => str.toUpperCase());
+}
+enum TimeAgo {
+	All,
+	TwoWeeksAgo = 14,
+	OneMonthAgo = 30,
+	TwoMonthAgo = 30
+}
 class CovidGraphHolder {
 	name: string;
 	multi: GraphObject[] = [];

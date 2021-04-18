@@ -1,8 +1,16 @@
 <div>
-	<mat-form-field>
+	<mat-form-field style="margin-right: 5px">
 		<mat-label>States</mat-label>
 		<mat-select [(value)]="selectedStates" (valueChange)="stateChanged()" multiple>
 			<mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
+		</mat-select>
+	</mat-form-field>
+	<mat-form-field>
+		<mat-label>Time ago</mat-label>
+		<mat-select placeholder="Country" (valueChange)="stateChanged()" [(ngModel)]="timeAgo" name="country">
+			<mat-option *ngFor="let c of ago" [value]="c.value">
+				{{ c.title }}
+			</mat-option>
 		</mat-select>
 	</mat-form-field>
 </div>

@@ -2,7 +2,6 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {environment} from '../environments/environment';
 
 @Injectable({
 	providedIn: 'root'
@@ -17,10 +16,13 @@ export class CovidService {
 	}
 
 	getByStates(selectedStates: string[]): Observable<any[]> {
-		return environment.production
-			? this.httpClient.get<any[]>('assets/json/state_data.json').pipe(
+		// return environment.production
+		// 	? this.httpClient.get<any[]>('assets/json/state_data.json').pipe(
+		// 		map(data => selectedStates.map(state => data[state]))
+		// 	)
+		// 	: this.httpClient.get<any[]>('/api/covid?names=' + selectedStates.join(','));
+		return this.httpClient.get<any[]>('assets/json/state_data.json').pipe(
 				map(data => selectedStates.map(state => data[state]))
-			)
-			: this.httpClient.get<any[]>('/api/covid?names=' + selectedStates.join(','));
+			);
 	}
 }

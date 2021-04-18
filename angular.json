@@ -67,7 +67,12 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "covid-graphs:build"
+            "browserTarget": "covid-graphs:build",
+			  "sourceMap": {
+				  "scripts": true,
+				  "styles": true,
+				  "vendor": true
+			  }
           },
           "configurations": {
             "production": {
