@@ -71,7 +71,7 @@ enum TimeAgo {
 	All,
 	TwoWeeksAgo = 14,
 	OneMonthAgo = 30,
-	TwoMonthAgo = 30
+	TwoMonthAgo = 60
 }
 class CovidGraphHolder {
 	name: string;
